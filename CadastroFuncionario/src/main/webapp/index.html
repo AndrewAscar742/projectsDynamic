@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="/CadastroFuncionario/FuncionarioServlet" method="post">
+	<label>Digite seu nome</label>
+	<input name="nome" type="text"/>
+	<label>Digite seu CPF</label>
+	<input name="cpf" type="number"/>
+	<label>Escolha seu cargo</label>
+	<select name="select">
+		<option value="GER_PROJETO"> Gerente de Projeto </option>
+		<option value="ANALISTA"> Analista </option>	
+		<option value="PROGRAMADOR"> Programador </option>		
+	</select>
+	<input type="submit"/>
+	</form>
+</body>
+</html>
