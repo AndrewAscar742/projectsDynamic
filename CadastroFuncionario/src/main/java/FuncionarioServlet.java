@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -18,30 +17,36 @@ import models.Funcionario;
 
 @WebServlet("/FuncionarioServlet")
 public class FuncionarioServlet extends HttpServlet {
-	private HttpSession session;
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Funcionario> fun = new ArrayList<Funcionario>();
-
+		
 		String nome = request.getParameter("nome");
 		String cpf = request.getParameter("cpf");
 		String cargo = request.getParameter("select");
-
+		
+		HttpSession session;
 		session = request.getSession();
 		Object obj = session.getAttribute("keyLista");
 
 		if (obj == null) {
 			session.setAttribute("keyLista", fun);
 			fun.add(new Funcionario(nome, cpf, Enum.valueOf(Cargo.class, cargo)));
+			
 		} else {
+			@SuppressWarnings("unchecked")
 			List<Funcionario> fun1 = (List<Funcionario>) obj;
-			fun1.add(new Funcionario(nome, cpf, Enum.valueOf(Cargo.class, cargo)));
-			fun.addAll(fun1);
+			fun = fun1;
+			fun.add(new Funcionario(nome, cpf, Enum.valueOf(Cargo.class, cargo)));
+			session.setAttribute("keyLista", fun);
 		}
+		PrintWriter writer;
+		writer = response.getWriter();
 		
-		PrintWriter writer = response.getWriter();
-		
-		fun.forEach(func -> writer.println(func.toString()));
+		fun.forEach(func -> {
+			writer.println(func.toString() + "<button onclick=location.href='http://localhost:6919/CadastroFuncionario/FuncDeleteServlet?cpf=" 
+		+ func.getCpf() + "';>Excluir </button>");
+		});
 
 		writer.println("ID da sessão: " + session.getId() + "\n");
 		writer.println("Hora de Criação: " + new Date(session.getCreationTime()));

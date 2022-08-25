@@ -47,4 +47,15 @@ public class Funcionario {
 		// TODO Auto-generated method stub
 		return "[ Nome: " + getNome() + " | CPF: " + getCpf() + " | Profissão: " + getCargoString() + "] \n";
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		Funcionario fun = (Funcionario) obj;
+		
+		if (this.cpf.equals(fun.getCpf())) 
+			return true;
+		else 
+			return false;
+		
+	}
 }
