@@ -21,17 +21,20 @@ import models.Funcionario;
 @WebServlet("/FuncDeleteServlet")
 @SuppressWarnings("unchecked")
 public class FuncDeleteServlet extends HttpServlet {
-	private HttpSession session;
-
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//Instâncias e Preparamento de Respostas
 		List<Funcionario> fun1 = new ArrayList<Funcionario>();
 		PrintWriter writer = response.getWriter();
 		
-		session = request.getSession();
+		//Pegando a sessão
+		HttpSession session = request.getSession();
 		Object obj = session.getAttribute("keyLista");
+		
+		//Pegando os parâmetros get
 		String cpf = request.getParameter("cpf");
 		
+		//Validando se a sessão existe e removendo
 		if (obj == null) {			
 			writer.println("Não existe funcionários em sua lista");
 			
@@ -44,6 +47,7 @@ public class FuncDeleteServlet extends HttpServlet {
 						fun1.remove(funcionario);
 					
 				}
+				//Atribuindo na mesma memória (List) armazenada na sessão a nova lista
 				session.setAttribute("keyLista", fun1);
 				
 			} catch (Exception e) {
@@ -51,7 +55,12 @@ public class FuncDeleteServlet extends HttpServlet {
 			}
 		}
 		
-		fun1.forEach(func -> writer.println(func.toString()));
+		//Construindo uma página
+		fun1.forEach(func -> {
+			writer.println(func.toString() + "<button onclick=location.href='http://localhost:6919/CadastroFuncionario/FuncDeleteServlet?cpf=" 
+		+ func.getCpf() + "';> Excluir Funcionário </button>" + "<button onclick=location.href='http://localhost:6919/CadastroFuncionario/FuncAlterarServlet?cpf=" 
+		+ func.getCpf() + "';> Alterar Funcionário </button>");
+		});
 		
 		writer.println("<button onclick=location.href='http://localhost:6919/CadastroFuncionario/index.html" 
 				+ "';>Voltar para página inicial </button>");
